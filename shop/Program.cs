@@ -64,7 +64,7 @@ namespace shop
             return false;
         }
 
-        public void showAllProduct()
+        public void showAllСommodity()
         {
             for (int i = 0; i < _counter.Count; i++)
             {

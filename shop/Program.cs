@@ -72,43 +72,52 @@ namespace shop
     class Seller
     {
         private List<Сommodity> _counter = new List<Сommodity> { new Сommodity("Колбаса", 10, 1),
-                                                                 new Сommodity("Огурец ", 1, 1),
+                                                                 new Сommodity("Огурец", 1, 1),
                                                                  new Сommodity("Помидор",2,1),
                                                                  new Сommodity("Рыба",15,2)};
-
-        public void AddaProduct(Сommodity сommodity)
-        {
-            _counter.Add(сommodity);
-        }
 
         public bool TrySell(out Сommodity сommodity, string ltemName)
         {
             сommodity = null;
 
-            for (int i = 0; i < _counter.Count; i++)
+            if (_counter.Count > 0)
             {
-                if (_counter[i].Name == ltemName)
+                for (int i = 0; i < _counter.Count; i++)
                 {
-                    сommodity = _counter[i];
+                    if (_counter[i].Name == ltemName)
+                    {
+                        сommodity = _counter[i];
 
-                    _counter.RemoveAt(i);
+                        _counter.RemoveAt(i);
 
-                    ShowMessage("Товар успешно продан", ConsoleColor.Green);
+                        ShowMessage("Товар успешно продан", ConsoleColor.Green);
 
-                    return true;
+                        return true;
+                    }
                 }
-            }
 
-            ShowMessage("Ошибка!!!", ConsoleColor.Red);
+                ShowMessage("Ошибка!!!", ConsoleColor.Red);
+            }
+            else
+            {
+                ShowMessage("Прилавок пуст", ConsoleColor.DarkGreen);
+            }
 
             return false;
         }
 
         public void ShowAllСommodity()
         {
-            for (int i = 0; i < _counter.Count; i++)
+            if (_counter.Count != 0)
             {
-                ShowMessage(_counter[i].Name + "\n Цена: " + _counter[i].Price+ "\n Вес: " + _counter[i].Weight, ConsoleColor.Blue);
+                for (int i = 0; i < _counter.Count; i++)
+                {
+                    ShowMessage(_counter[i].Name + "\n Цена: " + _counter[i].Price + "\n Вес: " + _counter[i].Weight, ConsoleColor.Blue);
+                }
+            }
+            else
+            {
+                ShowMessage("Прилавок пуст", ConsoleColor.DarkGreen);
             }
         }
     

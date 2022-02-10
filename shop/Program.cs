@@ -155,9 +155,9 @@ namespace shop
 
     class Player
     {
-        private List<Сommodity> _shoppingСart = new List<Сommodity> { };
-
         private int _money = 0;
+
+        private List<Сommodity> _shoppingСart = new List<Сommodity> { };
 
         public Player(int money)
         {

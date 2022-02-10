@@ -10,6 +10,41 @@ namespace shop
     {
         static void Main(string[] args)
         {
+            Seller seller = new Seller();
+            Player player = new Player();
+
+            string userInput;
+            bool isExit = false;
+
+            while (isExit == false)
+            {
+                ShowMenu();
+
+                userInput = Console.ReadLine();
+
+                switch (userInput)
+                {
+                    case "1":
+                        seller.ShowAllСommodity();
+                        break;
+
+                    case "2":
+                        player.TryBuy(seller);
+                        break;
+
+                    case "3":
+                        player.ShowShoppingList();
+                        break;
+                }
+
+            }
+        }
+
+        private static void ShowMenu()
+        {
+            Console.WriteLine("\nДля получения список продуктов на прилавке нажмите 1\n" +
+                              "\nДля покупки товара нажмите 2\n" +
+                              "\nпросмотреть список ваших покупок нажмите 3\n");
         }
     }
 
@@ -64,7 +99,7 @@ namespace shop
             return false;
         }
 
-        public void showAllСommodity()
+        public void ShowAllСommodity()
         {
             for (int i = 0; i < _counter.Count; i++)
             {
@@ -74,27 +109,30 @@ namespace shop
     
         private void ShowMessage(string message,ConsoleColor color)
         {
+            ConsoleColor preliminaryColor = Console.ForegroundColor;
+
             Console.ForegroundColor = color;
             Console.WriteLine(message);
+
+            Console.ForegroundColor = preliminaryColor;
         }
     }
 
     class Player
     {
-        private string _userName;
-
         private List<Сommodity> _shoppingСart = new List<Сommodity> { };
 
-        public Player(string userName)
-        {
-            _userName = userName;
-        }
-
-        public void TryBuy(Seller seller, string productName)
+        public void TryBuy(Seller seller)
         {
             Сommodity сommodity;
 
-            if (seller.TrySell(out сommodity, productName))
+            string userInput;
+
+            ShowMessage("Ведите наименование товара которы хотите приобрести",ConsoleColor.DarkYellow);
+
+            userInput = Console.ReadLine();
+
+            if (seller.TrySell(out сommodity, userInput))
             {
                 _shoppingСart.Add(сommodity);
             }
@@ -104,19 +142,28 @@ namespace shop
         {
             if (_shoppingСart.Count > 0)
             {
-                Console.WriteLine("Список купленных товаров");
+                ShowMessage("Список купленных товаров\n\n\n",ConsoleColor.Magenta);
 
                 for (int i = 0; i < _shoppingСart.Count; i++)
                 {
-                    Console.WriteLine($"{_shoppingСart[i].Name} \n" +
+                    ShowMessage($"{_shoppingСart[i].Name} \n" +
                                       $"Цена: {_shoppingСart[i].Price}\n" +
-                                      $"Вес: {_shoppingСart[i].Price}\n");
+                                      $"Вес: {_shoppingСart[i].Price}\n", ConsoleColor.Cyan);
                 }
             }
             else
             {
-                Console.WriteLine("У вас нет покупок");
+                ShowMessage("У вас нет покупок",ConsoleColor.DarkMagenta);
             }
+        }
+        private void ShowMessage(string message, ConsoleColor color)
+        {
+            ConsoleColor preliminaryColor = Console.ForegroundColor;
+
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+
+            Console.ForegroundColor = preliminaryColor;
         }
     }
 }

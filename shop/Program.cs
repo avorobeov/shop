@@ -55,11 +55,11 @@ namespace shop
 
     class Сommodity
     {
-        public string Name { get; protected set; }
+        public string Name { get; private set; }
 
-        public int Price { get; protected set; }
+        public int Price { get; private set; }
 
-        public int Weight { get; protected set; }
+        public int Weight { get; private set; }
 
         public Сommodity(string name, int price, int weight)
         {
@@ -120,8 +120,8 @@ namespace shop
                 ShowMessage("Прилавок пуст", ConsoleColor.DarkGreen);
             }
         }
-    
-        private void ShowMessage(string message,ConsoleColor color)
+
+        private void ShowMessage(string message, ConsoleColor color)
         {
             ConsoleColor preliminaryColor = Console.ForegroundColor;
 
@@ -142,7 +142,7 @@ namespace shop
 
             string userInput;
 
-            ShowMessage("Ведите наименование товара которы хотите приобрести",ConsoleColor.DarkYellow);
+            ShowMessage("Ведите наименование товара которы хотите приобрести", ConsoleColor.DarkYellow);
 
             userInput = Console.ReadLine();
 
@@ -156,7 +156,7 @@ namespace shop
         {
             if (_shoppingСart.Count > 0)
             {
-                ShowMessage("Список купленных товаров\n\n\n",ConsoleColor.Magenta);
+                ShowMessage("Список купленных товаров\n\n\n", ConsoleColor.Magenta);
 
                 for (int i = 0; i < _shoppingСart.Count; i++)
                 {
@@ -167,7 +167,7 @@ namespace shop
             }
             else
             {
-                ShowMessage("У вас нет покупок",ConsoleColor.DarkMagenta);
+                ShowMessage("У вас нет покупок", ConsoleColor.DarkMagenta);
             }
         }
         private void ShowMessage(string message, ConsoleColor color)

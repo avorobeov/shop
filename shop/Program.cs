@@ -10,8 +10,10 @@ namespace shop
     {
         static void Main(string[] args)
         {
+            int userMoney = 12;
+
             Seller seller = new Seller();
-            Player player = new Player();
+            Player player = new Player(userMoney);
 
             string userInput;
             bool isExit = false;
@@ -37,6 +39,14 @@ namespace shop
                         break;
 
                     case "4":
+                        seller.ShowNumberMoney();
+                        break;
+
+                    case "5":
+                        player.ShowNumberMoney();
+                        break;
+
+                    case "6":
                         isExit = true;
                         break;
                 }
@@ -49,7 +59,9 @@ namespace shop
             Console.WriteLine("\nДля получения список продуктов на прилавке нажмите 1\n" +
                               "\nДля покупки товара нажмите 2\n" +
                               "\nпросмотреть список ваших покупок нажмите 3\n" +
-                              "\nДля выхода нажмите 4\n");
+                              "\nДля показа количества денег продавца нажмите 4\n" +
+                              "\nДля показа количества денег пользователя нажмите 5\n" +
+                              "\nДля выхода нажмите 6\n");
         }
     }
 
@@ -71,12 +83,14 @@ namespace shop
 
     class Seller
     {
+        private int _money = 0;
+
         private List<Сommodity> _counter = new List<Сommodity> { new Сommodity("Колбаса", 10, 1),
                                                                  new Сommodity("Огурец", 1, 1),
                                                                  new Сommodity("Помидор",2,1),
                                                                  new Сommodity("Рыба",15,2)};
 
-        public bool TrySell(out Сommodity сommodity, string ltemName)
+        public bool TrySell(out Сommodity сommodity, string ltemName, ref int userMoney)
         {
             сommodity = null;
 
@@ -84,13 +98,16 @@ namespace shop
             {
                 for (int i = 0; i < _counter.Count; i++)
                 {
-                    if (_counter[i].Name == ltemName)
+                    if (_counter[i].Name == ltemName && _counter[i].Price <= userMoney)
                     {
                         сommodity = _counter[i];
 
-                        _counter.RemoveAt(i);
+                        _money += _counter[i].Price;
+                        userMoney -= _counter[i].Price;
 
                         ShowMessage("Товар успешно продан", ConsoleColor.Green);
+
+                        _counter.RemoveAt(i);
 
                         return true;
                     }
@@ -121,6 +138,10 @@ namespace shop
             }
         }
 
+        public void ShowNumberMoney()
+        {
+            ShowMessage($"Баланс продавца: {_money}", ConsoleColor.Magenta);
+        }
         private void ShowMessage(string message, ConsoleColor color)
         {
             ConsoleColor preliminaryColor = Console.ForegroundColor;
@@ -136,6 +157,13 @@ namespace shop
     {
         private List<Сommodity> _shoppingСart = new List<Сommodity> { };
 
+        private int _money = 0;
+
+        public Player(int money)
+        {
+            _money = money;
+        }
+
         public void TryBuy(Seller seller)
         {
             Сommodity сommodity;
@@ -146,7 +174,7 @@ namespace shop
 
             userInput = Console.ReadLine();
 
-            if (seller.TrySell(out сommodity, userInput))
+            if (seller.TrySell(out сommodity, userInput, ref _money))
             {
                 _shoppingСart.Add(сommodity);
             }
@@ -156,7 +184,7 @@ namespace shop
         {
             if (_shoppingСart.Count > 0)
             {
-                ShowMessage("Список купленных товаров\n\n\n", ConsoleColor.Magenta);
+                ShowMessage("\nСписок купленных товаров\n\n\n", ConsoleColor.Magenta);
 
                 for (int i = 0; i < _shoppingСart.Count; i++)
                 {
@@ -169,6 +197,11 @@ namespace shop
             {
                 ShowMessage("У вас нет покупок", ConsoleColor.DarkMagenta);
             }
+        }
+      
+        public void ShowNumberMoney()
+        {
+            ShowMessage($"Баланс пользователя: {_money}",ConsoleColor.Magenta);
         }
         private void ShowMessage(string message, ConsoleColor color)
         {
